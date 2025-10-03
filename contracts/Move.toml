@@ -1,0 +1,19 @@
+[package]
+name = "aptos_dex"
+version = "1.0.0"
+authors = []
+
+[addresses]
+aptos_dex = "_"
+
+[dependencies.AptosFramework]
+git = "https://github.com/aptos-labs/aptos-core.git"
+rev = "aptos-node-v1.8.0"
+subdir = "aptos-move/framework/aptos-framework"
+
+[dev-dependencies]
+
+[dev-addresses]
+Admin = "0x1"
+Creator = "0x2"
+Trader = "0x3"

@@ -1,0 +1,51 @@
+/* App.css - 应用程序特定样式 */
+
+.app {
+  text-align: center;
+}
+
+/* 导航栏样式 */
+.navbar {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* 主要内容区域 */
+.main-content {
+  min-height: calc(100vh - 200px);
+}
+
+/* 卡片悬停效果 */
+.card-hover {
+  transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* 按钮动画 */
+.btn-animate {
+  transition: all 0.2s ease;
+}
+
+.btn-animate:hover {
+  transform: scale(1.05);
+}
+
+/* 加载状态 */
+.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0.5rem;
+  }
+  
+  .main-content {
+    padding: 1rem;
+  }
+}
