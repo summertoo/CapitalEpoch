@@ -1,0 +1,23 @@
+{
+  "navigation": {
+    "home": "Home",
+    "trade": "Trade",
+    "create_token": "Create Token",
+    "create_pair": "Create Pair",
+    "portfolio": "Portfolio",
+    "commercial_street": "Commercial Street",
+    "performance": "Performance",
+    "create_facility": "Create Facility",
+    "trade_history": "Trade History",
+    "tokenomics": "Tokenomics",
+    "liquidity": "Liquidity",
+    "lp_calculator": "LP Calculator",
+    "price_simulator": "Price Simulator",
+    "mev_demo": "MEV Demo",
+    "aptos_mev": "Aptos MEV Analysis"
+  },
+  "footer": {
+    "copyright": "© 2024 CapitalEpoch. A gamefi DeFi platform on Aptos blockchain",
+    "network": "Devnet"
+  }
+}

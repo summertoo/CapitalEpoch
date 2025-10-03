@@ -17,9 +17,14 @@ import AptosMEVAnalysis from './components/AptosMEVAnalysis';
 import CommercialStreet from './components/CommercialStreet';
 import PerformanceRanking from './components/PerformanceRanking';
 import FacilityManager from './components/FacilityManager';
+import LanguageSwitcher from './components/LanguageSwitcher';
+import ScrollableNav from './components/ScrollableNav';
 import './App.css';
+import { useTranslation } from 'react-i18next';
 
 function App() {
+  const { t } = useTranslation();
+
   return (
     <WalletProvider>
       <Router>
@@ -37,102 +42,14 @@ function App() {
 
                 {/* 导航链接 */}
                 <div className="hidden md:block">
-                  <div className="ml-10 flex items-baseline space-x-4">
-                    <Link
-                      to="/"
-                      className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-                    >
-                      Trading Pairs
-                    </Link>
-                    <Link
-                      to="/trade"
-                      className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-                    >
-                      Trade
-                    </Link>
-                    <Link
-                      to="/create-token"
-                      className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-                    >
-                      Create Token
-                    </Link>
-                    <Link
-                      to="/create-pair"
-                      className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-                    >
-                      Create Pair
-                    </Link>
-                    <Link
-                      to="/portfolio"
-                      className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-                    >
-                      Portfolio
-                    </Link>
-                    <Link
-                      to="/commercial-street"
-                      className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-                    >
-                      Commercial Street
-                    </Link>
-                    <Link
-                      to="/performance"
-                      className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-                    >
-                      Performance
-                    </Link>
-                    <Link
-                      to="/create-facility"
-                      className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-                    >
-                      Create Facility
-                    </Link>
-                    <Link
-                      to="/history"
-                      className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-                    >
-                      Trade History
-                    </Link>
-                    <Link
-                      to="/tokenomics"
-                      className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-                    >
-                      Tokenomics
-                    </Link>
-                    <Link
-                      to="/liquidity"
-                      className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-                    >
-                      Liquidity
-                    </Link>
-                    <Link
-                      to="/lp-calculator"
-                      className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-                    >
-                      LP Calculator
-                    </Link>
-                    <Link
-                      to="/price-simulator"
-                      className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-                    >
-                      Price Simulator
-                    </Link>
-                    <Link
-                      to="/mev-demo"
-                      className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-                    >
-                      MEV Demo
-                    </Link>
-                    <Link
-                      to="/aptos-mev"
-                      className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-                    >
-                      Aptos MEV
-                    </Link>
-                  </div>
+                  <ScrollableNav />
                 </div>
 
-                {/* 钱包按钮 */}
-                <WalletButton />
+                {/* 钱包按钮和语言切换按钮 */}
+                <div className="flex items-center">
+                  <WalletButton />
+                  <LanguageSwitcher />
+                </div>
               </div>
             </div>
           </nav>
@@ -151,10 +68,10 @@ function App() {
               <Route path="/history" element={<TradeHistory />} />
               <Route path="/tokenomics" element={<TokenomicsCalculator />} />
               <Route path="/liquidity" element={<LiquidityManager />} />
-              <Route path="/lp-calculator" element={<LPCalculator />} />
-              <Route path="/price-simulator" element={<PriceSimulator />} />
-              <Route path="/mev-demo" element={<MEVDemo />} />
-              <Route path="/aptos-mev" element={<AptosMEVAnalysis />} />
+              {/* <Route path="/lp-calculator" element={<LPCalculator />} /> */}
+              {/* <Route path="/price-simulator" element={<PriceSimulator />} /> */}
+              {/* <Route path="/mev-demo" element={<MEVDemo />} /> */}
+              {/* <Route path="/aptos-mev" element={<AptosMEVAnalysis />} /> */}
             </Routes>
           </main>
 
@@ -162,10 +79,10 @@ function App() {
           <footer className="bg-white border-t mt-12">
             <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
               <div className="text-center text-gray-500 text-sm">
-                <p>© 2024 CapitalEpoch. A gamefi DeFi platform on Aptos blockchain</p>
+                <p>{t('footer.copyright')}</p>
                 <p className="mt-2">
                   <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
-                    Devnet
+                    {t('footer.network')}
                   </span>
                 </p>
               </div>
