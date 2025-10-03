@@ -148,7 +148,7 @@ const ScrollableNav: React.FC = () => {
       </button>
 
       {/* 隐藏滚动条样式 */}
-      <style jsx>{`
+      <style>{`
         .scrollbar-hide::-webkit-scrollbar {
           display: none;
         }
