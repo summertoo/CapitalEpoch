@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useWallet } from '../contexts/WalletContext';
+import { Network } from '@aptos-labs/ts-sdk';
 
 interface TokenForm {
   name: string;
@@ -34,6 +35,11 @@ const TokenCreator = () => {
       return;
     }
 
+    if (wallet.network === Network.MAINNET) {
+      alert('Token creation is only available on Devnet and Testnet');
+      return;
+    }
+
     if (!form.name || !form.symbol || !form.initialSupply) {
       alert('Please fill in all required fields');
       return;
@@ -42,8 +48,10 @@ const TokenCreator = () => {
     setLoading(true);
     
     try {
+      // 使用简化的token合约
       const transaction = {
-        function: "0xf3b20ebd0787e1504c41c25e2038729b7d4783a8dbcbca2d3601fef71af5755d::token_factory::create_token",
+        function: "0xf3b20ebd0787e1504c41c25e2038729b7d4783a8dbcbca2d3601fef71af5755d::simple_token::create_token",
+        type_arguments: [`0xf3b20ebd0787e1504c41c25e2038729b7d4783a8dbcbca2d3601fef71af5755d::simple_token::${form.symbol}`],
         arguments: [
           Array.from(new TextEncoder().encode(form.name)), // name as bytes
           Array.from(new TextEncoder().encode(form.symbol)), // symbol as bytes
@@ -57,7 +65,24 @@ const TokenCreator = () => {
       const result = await signAndSubmitTransaction(transaction);
       console.log('Token created successfully:', result);
       
-      // 重置表单 | Reset form
+      // 保存到本地存储
+      const createdToken = {
+        id: Date.now().toString(),
+        name: form.name,
+        symbol: form.symbol,
+        decimals: form.decimals,
+        initialSupply: form.initialSupply,
+        creator: wallet.account,
+        network: wallet.network,
+        txHash: result.hash,
+        createdAt: new Date().toISOString()
+      };
+      
+      const existingTokens = JSON.parse(localStorage.getItem('myCreatedTokens') || '[]');
+      existingTokens.push(createdToken);
+      localStorage.setItem('myCreatedTokens', JSON.stringify(existingTokens));
+      
+      // 重置表单
       setForm({
         name: '',
         symbol: '',
@@ -65,7 +90,7 @@ const TokenCreator = () => {
         initialSupply: ''
       });
       
-      alert('Token created successfully!');
+      alert('Token created successfully! Check "My Creations" to view your tokens.');
     } catch (error) {
       console.error('Failed to create token:', error);
       alert('Failed to create token, please check parameters and try again');

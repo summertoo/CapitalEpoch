@@ -17,6 +17,7 @@ import AptosMEVAnalysis from './components/AptosMEVAnalysis';
 import CommercialStreet from './components/CommercialStreet';
 import PerformanceRanking from './components/PerformanceRanking';
 import FacilityManager from './components/FacilityManager';
+import MyCreations from './components/MyCreations';
 import LanguageSwitcher from './components/LanguageSwitcher';
 import ScrollableNav from './components/ScrollableNav';
 import GroupedNav from './components/GroupedNav';
@@ -73,6 +74,7 @@ function App() {
               <Route path="/" element={<TradingPairs />} />
               <Route path="/trade" element={<TradingInterface />} />
               <Route path="/create-token" element={<TokenCreator />} />
+              <Route path="/my-creations" element={<MyCreations />} />
               <Route path="/create-pair" element={<TradingPairCreator />} />
               <Route path="/portfolio" element={<Portfolio />} />
               <Route path="/commercial-street" element={<CommercialStreet />} />
