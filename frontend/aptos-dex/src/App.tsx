@@ -19,6 +19,10 @@ import PerformanceRanking from './components/PerformanceRanking';
 import FacilityManager from './components/FacilityManager';
 import LanguageSwitcher from './components/LanguageSwitcher';
 import ScrollableNav from './components/ScrollableNav';
+import GroupedNav from './components/GroupedNav';
+import CompactNav from './components/CompactNav';
+import NetworkSwitcher from './components/NetworkSwitcher';
+import FaucetButton from './components/FaucetButton';
 import './App.css';
 import { useTranslation } from 'react-i18next';
 
@@ -40,13 +44,22 @@ function App() {
                   </Link>
                 </div>
 
-                {/* 导航链接 */}
+                {/* 导航链接 - 可选择不同的导航样式 */}
                 <div className="hidden md:block">
-                  <ScrollableNav />
+                  {/* 选项1: 分组导航 (推荐) */}
+                  <GroupedNav />
+                  
+                  {/* 选项2: 紧凑导航 */}
+                  {/* <CompactNav /> */}
+                  
+                  {/* 选项3: 原始滚动导航 */}
+                  {/* <ScrollableNav /> */}
                 </div>
 
-                {/* 钱包按钮和语言切换按钮 */}
-                <div className="flex items-center">
+                {/* 网络切换、水龙头、钱包按钮和语言切换按钮 */}
+                <div className="flex items-center space-x-3">
+                  <NetworkSwitcher />
+                  <FaucetButton />
                   <WalletButton />
                   <LanguageSwitcher />
                 </div>

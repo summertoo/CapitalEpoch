@@ -14,10 +14,22 @@
     "lp_calculator": "LP计算器",
     "price_simulator": "价格模拟器",
     "mev_demo": "MEV演示",
-    "aptos_mev": "Aptos MEV分析"
+    "aptos_mev": "Aptos MEV分析",
+    "groups": {
+      "trading": "交易",
+      "create": "创建",
+      "gamefi": "游戏金融",
+      "tools": "工具"
+    }
   },
   "footer": {
     "copyright": "© 2024 CapitalEpoch. 基于Aptos区块链的游戏化DeFi平台",
     "network": "开发网络"
+  },
+  "network": {
+    "devnet": "开发网",
+    "testnet": "测试网",
+    "mainnet": "主网",
+    "switch_network": "切换网络"
   }
 }

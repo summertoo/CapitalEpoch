@@ -15,11 +15,15 @@ const WalletButton = () => {
     return `${address.slice(0, 6)}...${address.slice(-4)}`;
   };
 
+  const formatBalance = (balance: string) => {
+    return parseFloat(balance).toFixed(3);
+  };
+
   return (
     <div className="flex items-center gap-4">
       {wallet.connected && (
         <div className="text-sm text-gray-600">
-          <div>余额: {wallet.balance} APT</div>
+          <div>余额: {formatBalance(wallet.balance)} APT</div>
           <div>地址: {formatAddress(wallet.account!)}</div>
         </div>
       )}

@@ -23,11 +23,8 @@ interface WalletContextType {
 // 创建上下文
 const WalletContext = createContext<WalletContextType | undefined>(undefined);
 
-// Aptos配置
-const aptosConfig = new AptosConfig({ 
-  network: Network.DEVNET 
-});
-const aptos = new Aptos(aptosConfig);
+// Aptos配置 - 动态创建
+let aptos = new Aptos(new AptosConfig({ network: Network.DEVNET }));
 
 // 钱包提供者组件
 export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
@@ -57,7 +54,7 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
       }));
 
       // 获取余额
-      await getBalance();
+      setTimeout(() => getBalance(), 1000); // 延迟获取余额
       
       console.log('钱包连接成功:', response.address);
     } catch (error) {
@@ -83,10 +80,18 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 
   // 切换网络
   const switchNetwork = (network: Network) => {
+    // 更新Aptos实例
+    aptos = new Aptos(new AptosConfig({ network }));
+    
     setWallet(prev => ({
       ...prev,
       network
     }));
+    
+    // 重新获取余额
+    if (wallet.account) {
+      getBalance();
+    }
   };
 
   // 获取账户余额
@@ -94,24 +99,69 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     if (!wallet.account) return;
     
     try {
+      // 方法1: 使用SDK的getAccountAPTAmount方法
+      try {
+        const balance = await aptos.getAccountAPTAmount({
+          accountAddress: wallet.account
+        });
+        setWallet(prev => ({
+          ...prev,
+          balance: (balance / 100000000).toString() // 转换为APT单位
+        }));
+        return;
+      } catch (sdkError) {
+        console.log('SDK方法失败，尝试资源查询:', sdkError);
+      }
+
+      // 方法2: 查询资源 - 支持新旧两种标准
       const resources = await aptos.getAccountResources({
         accountAddress: wallet.account
       });
       
-      // 查找APT余额
-      const aptResource = resources.find(
+      // 尝试新的FA标准
+      const faResource = resources.find(
+        (r) => r.type === '0x1::primary_fungible_store::PrimaryFungibleStore'
+      );
+      
+      if (faResource) {
+        const balance = (faResource.data as any).balance;
+        setWallet(prev => ({
+          ...prev,
+          balance: (parseInt(balance) / 100000000).toString()
+        }));
+        return;
+      }
+      
+      // 尝试旧的Coin标准
+      const coinResource = resources.find(
         (r) => r.type === '0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>'
       );
       
-      if (aptResource) {
-        const balance = (aptResource.data as any).coin.value;
+      if (coinResource) {
+        const balance = (coinResource.data as any).coin.value;
         setWallet(prev => ({
           ...prev,
-          balance: (parseInt(balance) / 100000000).toFixed(4) // 转换为APT单位
+          balance: (parseInt(balance) / 100000000).toString()
         }));
+        return;
       }
+      
+      // 如果都没找到，设置为0
+      setWallet(prev => ({
+        ...prev,
+        balance: '0'
+      }));
+      
     } catch (error) {
       console.error('获取余额失败:', error);
+      console.error('当前网络:', wallet.network);
+      console.error('账户地址:', wallet.account);
+      
+      // 设置默认余额
+      setWallet(prev => ({
+        ...prev,
+        balance: '0'
+      }));
     }
   };
 

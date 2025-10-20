@@ -14,10 +14,22 @@
     "lp_calculator": "LP Calculator",
     "price_simulator": "Price Simulator",
     "mev_demo": "MEV Demo",
-    "aptos_mev": "Aptos MEV Analysis"
+    "aptos_mev": "Aptos MEV Analysis",
+    "groups": {
+      "trading": "Trading",
+      "create": "Create",
+      "gamefi": "GameFi",
+      "tools": "Tools"
+    }
   },
   "footer": {
     "copyright": "© 2024 CapitalEpoch. A gamefi DeFi platform on Aptos blockchain",
     "network": "Devnet"
+  },
+  "network": {
+    "devnet": "Devnet",
+    "testnet": "Testnet",
+    "mainnet": "Mainnet",
+    "switch_network": "Switch Network"
   }
 }
