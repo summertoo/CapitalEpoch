@@ -255,7 +255,7 @@ module aptos_dex::dex_trading {
         let type_b = type_info::type_name<TokenB>();
         
         // 简单拼接类型名称作为ID
-        let mut pair_id = type_a;
+        let pair_id = type_a;
         string::append(&mut pair_id, string::utf8(b"-"));
         string::append(&mut pair_id, type_b);
         pair_id

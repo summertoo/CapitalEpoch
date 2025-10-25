@@ -1,6 +1,7 @@
 module aptos_dex::commercial_street {
     use std::signer;
     use std::string::{Self, String};
+    use std::vector;
     use aptos_framework::event;
     use aptos_framework::timestamp;
     use aptos_dex::trading_pair;
@@ -66,7 +67,7 @@ module aptos_dex::commercial_street {
         
         // 验证交易对是否存在且由创建者创建
         assert!(trading_pair::pair_exists(pair_address), E_PAIR_NOT_ASSOCIATED);
-        let (_, _, _, _, pair_creator, _, _, _) = trading_pair::get_pair_info(pair_address);
+        let (_, _, _, _, pair_creator, _, _, _, _) = trading_pair::get_pair_info(pair_address);
         assert!(pair_creator == creator_addr, E_NOT_AUTHORIZED);
 
         // 创建商业街信息
@@ -132,7 +133,7 @@ module aptos_dex::commercial_street {
         });
     }
 
-    /// 获取商业街信息
+    /// Get commercial street information
     #[view]
     public fun get_street_info(street_address: address): (u64, String, String, address, address, u64, bool) acquires StreetInfo {
         assert!(exists<StreetInfo>(street_address), E_STREET_NOT_EXISTS);
@@ -148,23 +149,23 @@ module aptos_dex::commercial_street {
         )
     }
 
-    /// 获取所有商业街
+    /// Get all commercial streets
     #[view]
     public fun get_all_streets(): vector<address> acquires StreetRegistry {
         let registry = borrow_global<StreetRegistry>(@aptos_dex);
         registry.streets
     }
 
-    /// 获取用户创建的商业街
+    /// Get user created commercial streets
     #[view]
-    public fun get_user_streets(user: address): vector<address> acquires StreetRegistry {
+    public fun get_user_streets(user: address): vector<address> acquires StreetRegistry, StreetInfo {
         let registry = borrow_global<StreetRegistry>(@aptos_dex);
         let user_streets = vector::empty<address>();
         let i = 0;
-        let len = vector::length(registry.streets);
+        let len = vector::length(&registry.streets);
         
         while (i < len) {
-            let street_addr = *vector::borrow(registry.streets, i);
+            let street_addr = *vector::borrow(&registry.streets, i);
             if (exists<StreetInfo>(street_addr)) {
                 let street_info = borrow_global<StreetInfo>(street_addr);
                 if (street_info.creator == user) {
@@ -177,7 +178,7 @@ module aptos_dex::commercial_street {
         user_streets
     }
 
-    /// 检查商业街是否存在
+    /// Check if commercial street exists
     #[view]
     public fun street_exists(street_address: address): bool {
         exists<StreetInfo>(street_address)

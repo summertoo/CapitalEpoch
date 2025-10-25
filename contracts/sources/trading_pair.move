@@ -1,12 +1,12 @@
 module aptos_dex::trading_pair {
     use std::signer;
     use std::string::String;
+    use std::vector;
     use aptos_framework::coin::{Self, Coin};
+    use aptos_framework::account;
     use aptos_framework::event;
     use aptos_framework::timestamp;
-    use aptos_framework::account;
     use aptos_dex::token_factory;
-    use aptos_dex::commercial_street;
 
     /// 错误码
     const E_NOT_AUTHORIZED: u64 = 1;
@@ -112,8 +112,8 @@ module aptos_dex::trading_pair {
         assert!(fee_rate <= MAX_FEE_RATE, E_INVALID_FEE_RATE);
         assert!(min_trade_amount > 0, E_INVALID_MIN_AMOUNT);
         assert!(token_factory::token_exists(token_a_address), E_INVALID_TOKEN);
-        // 验证商业街是否存在
-        assert!(commercial_street::street_exists(street_address), E_STREET_NOT_ASSOCIATED);
+        // Note: Street existence validation should be done at the caller level
+        // to avoid circular dependency between trading_pair and commercial_street modules
 
         // 检查USDT余额
         let usdt_balance = coin::balance<USDT>(creator_addr);
@@ -258,7 +258,7 @@ module aptos_dex::trading_pair {
         numerator / denominator
     }
 
-    /// 获取交易对信息
+    /// Get trading pair information
     #[view]
     public fun get_pair_info(pair_address: address): (address, address, u64, u64, address, u64, u64, bool, address) acquires PairInfo {
         assert!(exists<PairInfo>(pair_address), E_PAIR_NOT_EXISTS);
@@ -276,7 +276,7 @@ module aptos_dex::trading_pair {
         )
     }
 
-    /// 获取流动性池信息
+    /// Get liquidity pool information
     #[view]
     public fun get_pool_info(pair_address: address): (u64, u64, u64, u64) acquires LiquidityPool {
         let pool = borrow_global<LiquidityPool>(pair_address);
@@ -288,23 +288,23 @@ module aptos_dex::trading_pair {
         )
     }
 
-    /// 获取所有交易对
+    /// Get all trading pairs
     #[view]
     public fun get_all_pairs(): vector<address> acquires PairRegistry {
         let registry = borrow_global<PairRegistry>(@aptos_dex);
         registry.pairs
     }
 
-    /// 获取用户创建的交易对
+    /// Get user created trading pairs
     #[view]
-    public fun get_user_pairs(user: address): vector<address> acquires PairRegistry {
+    public fun get_user_pairs(user: address): vector<address> acquires PairRegistry, PairInfo {
         let registry = borrow_global<PairRegistry>(@aptos_dex);
         let user_pairs = vector::empty<address>();
         let i = 0;
-        let len = vector::length(registry.pairs);
+        let len = vector::length(&registry.pairs);
         
         while (i < len) {
-            let pair_addr = *vector::borrow(registry.pairs, i);
+            let pair_addr = *vector::borrow(&registry.pairs, i);
             if (exists<PairInfo>(pair_addr)) {
                 let pair_info = borrow_global<PairInfo>(pair_addr);
                 if (pair_info.creator == user) {
@@ -317,13 +317,13 @@ module aptos_dex::trading_pair {
         user_pairs
     }
 
-    /// 检查交易对是否存在
+    /// Check if trading pair exists
     #[view]
     public fun pair_exists(pair_address: address): bool {
         exists<PairInfo>(pair_address)
     }
 
-    /// 获取交易对关联的商业街地址
+    /// Get commercial street address associated with trading pair
     #[view]
     public fun get_pair_street(pair_address: address): address acquires PairInfo {
         assert!(exists<PairInfo>(pair_address), E_PAIR_NOT_EXISTS);

@@ -1,6 +1,7 @@
 module aptos_dex::token_factory {
     use std::signer;
     use std::string::{Self, String};
+    use std::vector;
     use aptos_framework::coin::{Self, Coin, MintCapability, BurnCapability, FreezeCapability};
     use aptos_framework::account;
     use aptos_framework::event;
@@ -116,7 +117,7 @@ module aptos_dex::token_factory {
         });
     }
 
-    /// 获取代币信息
+    /// Get token information
     #[view]
     public fun get_token_info(token_address: address): (String, String, u8, u64, address, u64) acquires TokenInfo {
         let token_info = borrow_global<TokenInfo>(token_address);
@@ -130,20 +131,20 @@ module aptos_dex::token_factory {
         )
     }
 
-    /// 获取代币余额
+    /// Get token balance
     #[view]
     public fun get_balance<CoinType>(account_addr: address): u64 {
         coin::balance<CoinType>(account_addr)
     }
 
-    /// 获取所有注册的代币
+    /// Get all registered tokens
     #[view]
     public fun get_all_tokens(): vector<address> acquires TokenRegistry {
         let registry = borrow_global<TokenRegistry>(@aptos_dex);
         registry.tokens
     }
 
-    /// 检查代币是否存在
+    /// Check if token exists
     #[view]
     public fun token_exists(token_address: address): bool {
         exists<TokenInfo>(token_address)

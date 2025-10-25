@@ -1,6 +1,7 @@
 module aptos_dex::facility {
     use std::signer;
     use std::string::{Self, String};
+    use std::vector;
     use aptos_framework::event;
     use aptos_framework::timestamp;
     use aptos_framework::coin::{Self, Coin};
@@ -212,7 +213,7 @@ module aptos_dex::facility {
         });
     }
 
-    /// 获取设施信息
+    /// Get facility information
     #[view]
     public fun get_facility_info(facility_address: address): (u64, address, u8, String, String, address, u64, u64, u64, u8, u64, u64) acquires FacilityInfo {
         assert!(exists<FacilityInfo>(facility_address), E_FACILITY_NOT_EXISTS);
@@ -233,23 +234,23 @@ module aptos_dex::facility {
         )
     }
 
-    /// 获取所有设施
+    /// Get all facilities
     #[view]
     public fun get_all_facilities(): vector<address> acquires FacilityRegistry {
         let registry = borrow_global<FacilityRegistry>(@aptos_dex);
         registry.facilities
     }
 
-    /// 获取商业街的设施列表
+    /// Get facilities on a commercial street
     #[view]
-    public fun get_street_facilities(street_address: address): vector<address> acquires FacilityRegistry {
+    public fun get_street_facilities(street_address: address): vector<address> acquires FacilityRegistry, FacilityInfo {
         let registry = borrow_global<FacilityRegistry>(@aptos_dex);
         let street_facilities = vector::empty<address>();
         let i = 0;
-        let len = vector::length(registry.facilities);
+        let len = vector::length(&registry.facilities);
         
         while (i < len) {
-            let facility_addr = *vector::borrow(registry.facilities, i);
+            let facility_addr = *vector::borrow(&registry.facilities, i);
             if (exists<FacilityInfo>(facility_addr)) {
                 let facility_info = borrow_global<FacilityInfo>(facility_addr);
                 if (facility_info.street_address == street_address) {
@@ -262,16 +263,16 @@ module aptos_dex::facility {
         street_facilities
     }
 
-    /// 获取用户拥有的设施列表
+    /// Get facilities owned by a user
     #[view]
-    public fun get_user_facilities(user: address): vector<address> acquires FacilityRegistry {
+    public fun get_user_facilities(user: address): vector<address> acquires FacilityRegistry, FacilityInfo {
         let registry = borrow_global<FacilityRegistry>(@aptos_dex);
         let user_facilities = vector::empty<address>();
         let i = 0;
-        let len = vector::length(registry.facilities);
+        let len = vector::length(&registry.facilities);
         
         while (i < len) {
-            let facility_addr = *vector::borrow(registry.facilities, i);
+            let facility_addr = *vector::borrow(&registry.facilities, i);
             if (exists<FacilityInfo>(facility_addr)) {
                 let facility_info = borrow_global<FacilityInfo>(facility_addr);
                 if (facility_info.owner == user) {
@@ -284,13 +285,13 @@ module aptos_dex::facility {
         user_facilities
     }
 
-    /// 检查设施是否存在
+    /// Check if facility exists
     #[view]
     public fun facility_exists(facility_address: address): bool {
         exists<FacilityInfo>(facility_address)
     }
 
-    /// 获取设施类型名称
+    /// Get facility type name
     #[view]
     public fun get_facility_type_name(facility_type: u8): String {
         if (facility_type == FACILITY_TYPE_SHOP) {

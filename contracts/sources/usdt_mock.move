@@ -42,7 +42,7 @@ module aptos_dex::usdt_mock {
         coin::deposit(to, coins);
     }
 
-    /// 获取USDT余额
+    /// Get USDT balance
     #[view]
     public fun get_usdt_balance(account: address): u64 {
         coin::balance<USDT>(account)

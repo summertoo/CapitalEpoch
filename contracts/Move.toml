@@ -7,13 +7,10 @@ authors = []
 aptos_dex = "_"
 
 [dependencies.AptosFramework]
-git = "https://github.com/aptos-labs/aptos-core.git"
-rev = "main"
-subdir = "aptos-move/framework/aptos-framework"
+#git = "https://github.com/aptos-labs/aptos-core.git"
+#rev = "aptos-cli-v7.7.0"
+#subdir = "aptos-move/framework/aptos-framework"
+local = "../../aptos-core/aptos-move/framework/aptos-framework"
 
 [dev-dependencies]
 
-[dev-addresses]
-Admin = "0x1"
-Creator = "0x2"
-Trader = "0x3"
