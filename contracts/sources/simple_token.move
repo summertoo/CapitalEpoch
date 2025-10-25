@@ -13,6 +13,7 @@ module aptos_dex::simple_token {
     }
 
     /// Token creation event
+    #[event]
     struct TokenCreatedEvent has drop, store {
         creator: address,
         name: String,

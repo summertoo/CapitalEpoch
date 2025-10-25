@@ -72,6 +72,7 @@ module aptos_dex::performance {
     }
 
     /// 业绩更新事件
+    #[event]
     struct PerformanceUpdatedEvent has drop, store {
         street_address: address,
         period_type: u8,
@@ -85,6 +86,7 @@ module aptos_dex::performance {
     }
 
     /// 奖励发放事件
+    #[event]
     struct RewardIssuedEvent has drop, store {
         street_address: address,
         period_type: u8,
@@ -95,6 +97,7 @@ module aptos_dex::performance {
     }
 
     /// 惩罚执行事件
+    #[event]
     struct PunishmentAppliedEvent has drop, store {
         street_address: address,
         period_type: u8,

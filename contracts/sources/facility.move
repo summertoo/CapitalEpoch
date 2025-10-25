@@ -45,6 +45,7 @@ module aptos_dex::facility {
     }
 
     /// 设施创建事件
+    #[event]
     struct FacilityCreatedEvent has drop, store {
         facility_address: address,
         id: u64,
@@ -57,6 +58,7 @@ module aptos_dex::facility {
     }
 
     /// 设施升级事件
+    #[event]
     struct FacilityUpgradedEvent has drop, store {
         facility_address: address,
         level: u8,
@@ -65,6 +67,7 @@ module aptos_dex::facility {
     }
 
     /// 设施收益事件
+    #[event]
     struct FacilityRevenueEvent has drop, store {
         facility_address: address,
         revenue: u64,

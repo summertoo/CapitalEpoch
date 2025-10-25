@@ -29,6 +29,7 @@ module aptos_dex::token_factory {
     }
 
     /// 代币创建事件
+    #[event]
     struct TokenCreatedEvent has drop, store {
         token_address: address,
         name: String,
@@ -40,6 +41,7 @@ module aptos_dex::token_factory {
     }
 
     /// 代币转账事件
+    #[event]
     struct TokenTransferEvent has drop, store {
         from: address,
         to: address,

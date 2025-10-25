@@ -53,6 +53,7 @@ module aptos_dex::trading_pair {
     }
 
     /// 交易对创建事件
+    #[event]
     struct PairCreatedEvent has drop, store {
         pair_address: address,
         token_a: address,
@@ -66,6 +67,7 @@ module aptos_dex::trading_pair {
     }
 
     /// 交易事件
+    #[event]
     struct TradeEvent has drop, store {
         pair_address: address,
         trader: address,
@@ -78,6 +80,7 @@ module aptos_dex::trading_pair {
     }
 
     /// 流动性添加事件
+    #[event]
     struct LiquidityAddedEvent has drop, store {
         pair_address: address,
         provider: address,

@@ -30,6 +30,7 @@ module aptos_dex::commercial_street {
     }
 
     /// 商业街创建事件
+    #[event]
     struct StreetCreatedEvent has drop, store {
         street_address: address,
         id: u64,
@@ -40,6 +41,7 @@ module aptos_dex::commercial_street {
     }
 
     /// 商业街更新事件
+    #[event]
     struct StreetUpdatedEvent has drop, store {
         street_address: address,
         name: String,

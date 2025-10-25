@@ -1,7 +1,7 @@
 import { useWallet } from '../contexts/WalletContext';
 
 const WalletButton = () => {
-  const { wallet, connect, disconnect } = useWallet();
+  const { wallet, connect, disconnect, getBalance } = useWallet();
 
   const handleClick = () => {
     if (wallet.connected) {
@@ -16,7 +16,19 @@ const WalletButton = () => {
   };
 
   const formatBalance = (balance: string) => {
-    return parseFloat(balance).toFixed(3);
+    const num = parseFloat(balance);
+    if (isNaN(num)) return '0.000';
+    
+    // 如果余额很小，显示更多小数位
+    if (num < 0.001) {
+      return num.toFixed(6);
+    }
+    return num.toFixed(3);
+  };
+
+  const handleRefreshBalance = async () => {
+    console.log('手动刷新余额');
+    await getBalance();
   };
 
   return (
@@ -25,6 +37,12 @@ const WalletButton = () => {
         <div className="text-sm text-gray-600">
           <div>余额: {formatBalance(wallet.balance)} APT</div>
           <div>地址: {formatAddress(wallet.account!)}</div>
+          <button
+            onClick={handleRefreshBalance}
+            className="mt-1 px-3 py-1 text-xs bg-green-500 hover:bg-green-600 text-white rounded transition-colors"
+          >
+            刷新余额
+          </button>
         </div>
       )}
       
